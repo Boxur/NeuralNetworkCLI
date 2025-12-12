@@ -1,0 +1,6 @@
+[submodule "nn"]
+	path = nn
+	url = https://github.com/Boxur/NeuralNetwork.git
+[submodule "cli"]
+	path = cli
+	url = https://github.com/Boxur/Commands.git
