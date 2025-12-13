@@ -2,17 +2,24 @@
 
 MnistGeneration::MnistGeneration()
 { 
-	trainingInputArray_.resize(784);
-	trainingOutputArray_.resize(11);
-	testInputArray_.resize(784);
-	testOutputArray_.resize(11);
+	trainingInputArray_.resize(794);
+	trainingOutputArray_.resize(784);
+	testInputArray_.resize(794);
+	testOutputArray_.resize(784);
 }
 
 MnistGeneration::~MnistGeneration()
 {
-	trainingInputs_.close();
-	trainingOutputs_.close();
+	if(trainingInputs_)
+		trainingInputs_.close();
+	if(trainingOutputs_)
+		trainingOutputs_.close();
+	if(testInputs_)
+		testInputs_.close();
+	if(testOutputs_)
+		testOutputs_.close();
 }
+
 bool MnistGeneration::GetNextTrainingData(std::vector<double> &inputs, std::vector<double> &outputs)
 {
 
@@ -20,61 +27,35 @@ bool MnistGeneration::GetNextTrainingData(std::vector<double> &inputs, std::vect
 	{
 		return false;
 	}
-	if(inputs.size()<784)
+	if(inputs.size()<794)
 		Log(Log.error,"The input vector is too small");
-	if(outputs.size()<11)
+	if(outputs.size()<784)
 		Log(Log.error,"The output vector is too small");
-	//inputs.resize(784);
-	//outputs.resize(11);
-	if (rand() % 15 == 0)
+	
+	char byte;
+	for (int i = 0; i < 784; i++)
 	{
-		for (int i = 0; i < 784; i++)
-		{
-			inputs[i] = (double)(rand() % 256) / 255.0;
-			trainingInputArray_[i] = inputs[i];
-		}
-		for (int i = 0; i < 11; i++)
-		{
-			outputs[i] = 0;
-			trainingOutputArray_[i] = outputs[i];
-		}
-		outputs[10] = 1;
-		trainingOutputArray_[10] = 1;
+		trainingInputs_.read(&byte, 1);
+		outputs[i] = inputs[i] = (double)((unsigned char)byte)/255;
+		trainingOutputArray_[i] = trainingInputArray_[i] = inputs[i];
 	}
-	else
-	{
-		char byte;
-		for (int i = 0; i < 784; i++)
-		{
-			trainingInputs_.read(&byte, 1);
-			inputs[i] = (double)((unsigned char)byte+(rand()%50-25)) / 255.0;
-			inputs[i] = ((inputs[i] < 0) ? 0 : inputs[i]);
-			inputs[i] = ((inputs[i] > 1) ? 1 : inputs[i]);
-			trainingInputArray_[i] = inputs[i];
-		}
-		for (int i = 0; i < 11; i++)
-		{
-			outputs[i] = 0;
-			trainingOutputArray_[i] = outputs[i];
-		}
-		if(!trainingOutputs_.read(&byte, 1))
-			return false;
-		outputs[(int)byte] = 1;
-		trainingOutputArray_[(int)byte] = 1;
-	}
+	for (int i = 0; i < 10; i++)
+		trainingInputArray_[i+784] = inputs[i+784] = 0;
+	if(!trainingOutputs_.read(&byte, 1))
+		return false;
+	inputs[(int)byte+784] = 1;
+	trainingInputArray_[(int)byte+784] = 1;
 	return true;
 	
 }
 
 void MnistGeneration::GetSameTrainingData(std::vector<double> &inputs, std::vector<double> &outputs)
 {
-	inputs.resize(784);
-	outputs.resize(11);
-	for (int i = 0; i < 784; i++)
+	for (int i = 0; i < 794; i++)
 	{
 		inputs[i] = trainingInputArray_[i];
 	}
-	for (int i = 0; i < 11; i++)
+	for (int i = 0; i < 784; i++)
 	{
 		outputs[i] = trainingOutputArray_[i];
 	}
@@ -86,54 +67,34 @@ bool MnistGeneration::GetNextTestData(std::vector<double> &inputs, std::vector<d
 	{
 		return false;
 	}
-	inputs.resize(784);
-	outputs.resize(11);
-	if (rand() % 15 == 0)
+
+	char byte;
+	for (int i = 0; i < 784; i++)
 	{
-		for (int i = 0; i < 784; i++)
-		{
-			inputs[i] = (double)(rand() % 256) / 255.0;
-			testInputArray_[i] = inputs[i];
-		}
-		for (int i = 0; i < 11; i++)
-		{
-			outputs[i] = 0;
-			testOutputArray_[i] = outputs[i];
-		}
-		outputs[10] = 1;
-		testOutputArray_[10] = 1;
+		testInputs_.read(&byte, 1);
+		inputs[i] = (double)((unsigned char)byte) / 255.0;
+		outputs[i] = inputs[i];
+		testInputArray_[i] = inputs[i];
 	}
-	else
+	for (int i = 0; i < 10; i++)
 	{
-		char byte;
-		for (int i = 0; i < 784; i++)
-		{
-			testInputs_.read(&byte, 1);
-			inputs[i] = (double)((unsigned char)byte) / 255.0;
-			testInputArray_[i] = inputs[i];
-		}
-		for (int i = 0; i < 11; i++)
-		{
-			outputs[i] = 0;
-			testOutputArray_[i] = outputs[i];
-		}
-		if(!testOutputs_.read(&byte, 1))
-			return false;
-		outputs[(int)byte] = 1;
-		testOutputArray_[(int)byte] = 1;
+		inputs[i+784] = 0;
+		testInputArray_[i+784] = 0;
 	}
+	if(!testOutputs_.read(&byte, 1))
+		return false;
+	inputs[(int)byte+784] = 1;
+	testInputArray_[(int)byte+784] = 1;
 	return true;
 }
 
 void MnistGeneration::GetSameTestData(std::vector<double> &inputs, std::vector<double> &outputs)
 {
-	inputs.resize(784);
-	outputs.resize(11);
-	for (int i = 0; i < 784; i++)
+	for (int i = 0; i < 794; i++)
 	{
 		inputs[i] = testInputArray_[i];
 	}
-	for (int i = 0; i < 11; i++)
+	for (int i = 0; i < 784; i++)
 	{
 		outputs[i] = testOutputArray_[i];
 	}

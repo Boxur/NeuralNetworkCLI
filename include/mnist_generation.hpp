@@ -2,14 +2,13 @@
 #include "network_data.hpp"
 #include "log.hpp"
 #include <fstream>
-#include <stdlib.h>
+#include <iostream>
 class MnistGeneration: public NetworkData
 {
 private:
-	// 11 outputs for the 10 digits and noise
-	std::initializer_list<int> networkLayout_ = {784, 30, 30, 11};
-	int numberOfLayers_ = 4;
-	int trainingSetCount_ = 60000;
+	std::initializer_list<int> networkLayout_ = {794,30, 784};
+	int numberOfLayers_ = 3;
+
 
 	std::vector<double> trainingInputArray_;
 	std::vector<double> trainingOutputArray_;
