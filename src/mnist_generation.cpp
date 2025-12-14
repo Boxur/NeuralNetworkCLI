@@ -2,6 +2,7 @@
 
 MnistGeneration::MnistGeneration()
 { 
+	std::srand(std::time({}));
 	trainingInputArray_.resize(794);
 	trainingOutputArray_.resize(784);
 	testInputArray_.resize(794);
@@ -36,8 +37,10 @@ bool MnistGeneration::GetNextTrainingData(std::vector<double> &inputs, std::vect
 	for (int i = 0; i < 784; i++)
 	{
 		trainingInputs_.read(&byte, 1);
-		outputs[i] = inputs[i] = (double)((unsigned char)byte)/255;
-		trainingOutputArray_[i] = trainingInputArray_[i] = inputs[i];
+		outputs[i] = (double)((unsigned char)byte)/255;
+		inputs[i] = outputs[i]*(1-noise_)+(((double)std::rand()/(double)RAND_MAX)*noise_);
+		trainingOutputArray_[i] = outputs[i];
+		trainingInputArray_[i] = inputs[i];
 	}
 	for (int i = 0; i < 10; i++)
 		trainingInputArray_[i+784] = inputs[i+784] = 0;
@@ -75,6 +78,7 @@ bool MnistGeneration::GetNextTestData(std::vector<double> &inputs, std::vector<d
 		inputs[i] = (double)((unsigned char)byte) / 255.0;
 		outputs[i] = inputs[i];
 		testInputArray_[i] = inputs[i];
+		testOutputArray_[i] = outputs[i];
 	}
 	for (int i = 0; i < 10; i++)
 	{
