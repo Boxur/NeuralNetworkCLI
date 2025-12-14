@@ -100,7 +100,7 @@ int main()
 		};		
 
 	console["network"]["save"].function =
-	[&](const std::vector<std::string>& args)
+		[&](const std::vector<std::string>& args)
 		{
 			std::string name = "network.nn";
 			if(args.size() > 0)
@@ -108,6 +108,26 @@ int main()
 			network.SaveNetwork(name);
 		};
 	
+	console["network"]["generate"].function =
+		[&](const std::vector<std::string>&)
+		{
+			MnistGeneration gen;
+			std::vector<double> input(794);
+			std::vector<double> output(784);
+			gen.LoadTestData();
+			gen.GetNextTestData(input,output);
+			std::ofstream correct("correct.pgm");
+			correct<<"P2"<<std::endl<<"28 28"<<std::endl<<"255"<<std::endl;
+			for(int i=0;i<784;i++)
+				correct<<(int)(output[i]*255)<<" ";
+			correct.close();
+			output = network.Compute(input);
+			std::ofstream generated("generated.pgm");
+			generated<<"P2"<<std::endl<<"28 28"<<std::endl<<"255"<<std::endl;
+			for(int i=0;i<784;i++)
+				generated<<(int)(output[i]*255)<<" ";
+		};
+
 	runConsole(console);
 	//std::shared_ptr<NetworkData> test = std::make_shared<MnistGeneration>();
 	//test->LoadTrainingData();
