@@ -97,7 +97,28 @@ int main()
 			}	
 			network.SetLearningRate(lr);
 	
-		};		
+		};	
+	
+	console["network"]["set"]["noise"].function =
+		[&](const std::vector<std::string>& args)
+		{
+			if(args.size()<0)
+			{
+				std::cout<<"Usage: noise [integer > 0]"<<std::endl;
+				return;
+			}
+			std::istringstream ss(args[0]);
+			double noise=0.0;
+			ss >> noise;
+			if(noise <= 0)
+			{
+				std::cout<<"Usage: noise [integer > 0]"<<std::endl;
+				return;
+			}
+
+			std::static_pointer_cast<MnistGeneration>(data)->SetNoise(noise);
+	
+		};
 
 	console["network"]["save"].function =
 		[&](const std::vector<std::string>& args)
@@ -127,6 +148,7 @@ int main()
 			for(int i=0;i<784;i++)
 				generated<<(int)(output[i]*255)<<" ";
 		};
+	
 
 	runConsole(console);
 	//std::shared_ptr<NetworkData> test = std::make_shared<MnistGeneration>();
