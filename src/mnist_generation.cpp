@@ -145,3 +145,8 @@ int MnistGeneration::GetNumberOfLayers()
 {
 	return numberOfLayers_;
 }
+
+void MnistGeneration::SetNoise(double noise)
+{
+	noise_ = noise;
+}

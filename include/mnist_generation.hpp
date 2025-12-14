@@ -12,7 +12,7 @@ private:
 	std::initializer_list<int> networkLayout_ = {794,30, 784};
 	int numberOfLayers_ = 3;
 
-	double noise_ = 0.1f;
+	double noise_ = 0.0f;
 
 
 	std::vector<double> trainingInputArray_;
@@ -45,4 +45,6 @@ public:
 	std::initializer_list<int> GetNetworkLayout() override;
 
 	int GetNumberOfLayers() override;
+
+	void SetNoise(double noise);
 };
