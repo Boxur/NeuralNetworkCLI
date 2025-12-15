@@ -9,8 +9,8 @@
 class MnistGeneration: public NetworkData
 {
 private:
-	std::initializer_list<int> networkLayout_ = {794,30, 784};
-	int numberOfLayers_ = 3;
+	std::initializer_list<int> networkLayout_ = {794,256,256,256, 784};
+	int numberOfLayers_ = 5;
 
 	double noise_ = 0.0f;
 

@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <sstream>
 
-int main()
+int main(int argc,char* argv[])
 {
 	Console console;
 
@@ -149,8 +149,10 @@ int main()
 				generated<<(int)(output[i]*255)<<" ";
 		};
 	
-
-	runConsole(console);
+	if(argc==1)
+		runConsole(console);
+	else
+		runConsole(console,argv[1]);
 	//std::shared_ptr<NetworkData> test = std::make_shared<MnistGeneration>();
 	//test->LoadTrainingData();
 	//std::vector<double> inputs(794);
