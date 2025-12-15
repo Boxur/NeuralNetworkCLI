@@ -1,6 +1,6 @@
 build/
 .vim.pred
-network.nn
 neural_network_cli
 *.pgm
 *.sh
+*.nn
