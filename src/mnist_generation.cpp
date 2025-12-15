@@ -75,8 +75,8 @@ bool MnistGeneration::GetNextTestData(std::vector<double> &inputs, std::vector<d
 	for (int i = 0; i < 784; i++)
 	{
 		testInputs_.read(&byte, 1);
-		inputs[i] = (double)((unsigned char)byte) / 255.0;
-		outputs[i] = inputs[i];
+		outputs[i] = (double)((unsigned char)byte) / 255.0;
+		inputs[i] = outputs[i]*(1-noise_)+(((double)std::rand()/(double)RAND_MAX)*noise_);
 		testInputArray_[i] = inputs[i];
 		testOutputArray_[i] = outputs[i];
 	}
