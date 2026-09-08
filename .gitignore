@@ -1,4 +1,4 @@
-build/
+out/
 .vim.pred
 neural_network_cli
 *.pgm

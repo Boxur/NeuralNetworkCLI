@@ -1,6 +1,6 @@
-[submodule "cli"]
-	path = cli
+[submodule "external/axon"]
+	path = external/axon
+	url = https://github.com/Boxur/axon.git
+[submodule "external/cli"]
+	path = external/cli
 	url = https://github.com/Boxur/Commands.git
-[submodule "nn"]
-	path = nn
-	url = https://github.com/Boxur/NeuralNetwork.git
